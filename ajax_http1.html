@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+
+<!-- 
+original code come from 
+https://www.w3schools.com/xml/tryit.asp?filename=tryajax_get
+
+just modified for own purpose
+
+-->
+
+<script>
+function loadDoc() {
+  
+var xhttp = new XMLHttpRequest();
+
+xhttp.open("GET", "http://localhost:8080/S4/2?limit=5", true);
+  xhttp.send();
+  
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+	
+	console.log("http-response : " + this.responseText);
+    }
+  };
+  
+}
+</script>
+
+
+<html>
+<body>
+
+<h1>The XMLHttpRequest for Servlet</h1>
+
+<button type="button" onclick="loadDoc()">Request data</button>
+
+<br /> <br />
+<div id="demo"> no data, press "Request data"-button to get data from server 
+</div>
+
+</body>
+</html>
