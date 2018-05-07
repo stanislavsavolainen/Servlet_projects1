@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+
+<!-- 
+original code come from 
+https://www.w3schools.com/xml/tryit.asp?filename=tryajax_get
+
+just modified for own purpose
+
+-->
+
+<style type="text/css">
+
+	td{
+		color: green;
+		font-size: 20px;
+		background-color: orange;
+	}
+
+	button {
+		
+		color: green;
+		font-size: 20px;
+		background-color: orange;
+
+	}
+
+
+</style>
+
+<script>
+function loadDoc() {
+
+
+var amount_of_elements = document.getElementById("count").value;
+  
+var xhttp = new XMLHttpRequest();
+
+xhttp.open("GET", "http://localhost:8080/S4/2?limit=" + amount_of_elements, true);
+  xhttp.send();
+  
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     
+
+	//JSON to javascript object
+	//https://www.w3schools.com/js/js_json_parse.asp
+
+	let gui_data = "";
+	
+	gui_data += "<table border='3'>";
+	//gui_data += "<tr>";
+	
+	var js_object = JSON.parse(this.responseText);
+	console.log(js_object);
+	console.log("object lenght :"+js_object.length);
+
+	/*
+	js_object.map( ( element, key ) ){
+		return "<td>" + element + "</td>";  
+		//return JSON.stringify(element);
+	}
+	*/
+
+	for(var i = 0; i < js_object.length; i++){
+		console.log("Array element index :" + i + "and data :" + js_object[i]);
+		gui_data += "<tr><td>" + js_object[i] + "</td></tr>"; 
+	}
+	
+
+	//gui_data += "<td>"+this.responseText+"</td>";
+
+
+
+	//gui_data += "</tr>";
+	gui_data += "</table>";
+
+
+	 document.getElementById("demo").innerHTML = gui_data;
+	
+	console.log("http-response : " + this.responseText);
+    }
+  };
+  
+}
+</script>
+
+
+<html>
+<body>
+
+<h1>The XMLHttpRequest for Servlet</h1>
+
+<input type="text" lenght="10" id="count" />
+<button type="button" onclick="loadDoc()">Request data</button>
+
+<br /> <br />
+<div id="demo"> no data, press "Request data"-button to get data from server 
+</div>
+
+</body>
+</html>

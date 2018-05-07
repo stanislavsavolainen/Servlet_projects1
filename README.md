@@ -17,7 +17,7 @@ sudo /etc/init.d/tomcat7 stop
  http://localhost:8080/S4/2
  when this servlet launched at tomcat server
 
-3) Open front-end file ajax_http1.html 
+3) Open front-end file ajax_http2.html 
 -> press button to send request to server and get response
 
 -----------------------------------------------------------------
