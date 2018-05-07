@@ -21,16 +21,24 @@ public class TwoServlet  extends HttpServlet {
 	
 		// https://stackoverflow.com/questions/4112686/how-to-use-servlets-and-ajax/
 	   
-		List< String> list = new ArrayList<>();
-	    //list.add("item1");
-	    //list.add("item2");
-	    //list.add("item3");
-	    
+		//allow cross-origin 
+		 	response.addHeader("Access-Control-Allow-Origin", "*");
+	        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+	        response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+	        response.addHeader("Access-Control-Max-Age", "1728000");
 		
+	        
+		
+		List< String> list = new ArrayList<>();
+	    
 		String value = request.getParameter("limit");
 		
 		//if value parameter is not empty
 		if( value != null && value.length() != 0  ){
+		
+			
+		// this code is own solution , also "regular expression = regexp" can be used 
+		// to validate string for not allowed characters	
 			
 			//what if value is not number ?
 			char number_character[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
@@ -73,9 +81,7 @@ public class TwoServlet  extends HttpServlet {
 			}
 		}
 	    
-	    
 	    String json = new Gson().toJson(list);
-
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
 	    response.getWriter().write(json);
