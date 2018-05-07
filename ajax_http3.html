@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+
+<!-- 
+original code come from 
+https://www.w3schools.com/xml/tryit.asp?filename=tryajax_get
+
+just modified for own purpose
+
+-->
+
+<style type="text/css">
+
+	div {
+		color: green;
+		font-size: 20px;
+		background-color: orange;
+		 border-style: solid;
+    		border-width: 1px;
+	}
+
+	button {
+		
+		color: green;
+		font-size: 20px;
+		background-color: orange;
+
+	}
+
+
+</style>
+
+<script>
+function loadDoc() {
+
+
+var amount_of_elements = document.getElementById("count").value;
+  
+var xhttp = new XMLHttpRequest();
+
+xhttp.open("GET", "http://localhost:8080/S4/2?limit=" + amount_of_elements, true);
+  xhttp.send();
+  
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     
+
+	//JSON to javascript object
+	//https://www.w3schools.com/js/js_json_parse.asp
+
+	let gui_data = "";
+	
+	gui_data += "<div>";
+	
+	var js_object = JSON.parse(this.responseText);
+	console.log(js_object);
+	console.log("object lenght :"+js_object.length);
+
+	for(var i = 0; i < js_object.length; i++){
+		console.log("Array element index :" + i + "and data :" + js_object[i]);
+		gui_data += "<div>" + js_object[i] + "</div>"; 
+
+	}
+	
+	gui_data += "</div>";
+
+	document.getElementById("demo").innerHTML = gui_data;	
+	console.log("http-response : " + this.responseText);
+    }
+  };
+  
+}
+</script>
+
+
+<html>
+<body>
+
+<h1>The XMLHttpRequest for Servlet</h1>
+
+<input type="text" lenght="10" id="count" />
+<button type="button" onclick="loadDoc()">Request data</button>
+
+<br /> <br />
+<div id="demo"> no data, press "Request data"-button to get data from server 
+</div>
+
+</body>
+</html>
