@@ -2,6 +2,8 @@ package src;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,22 +26,34 @@ public class MyLogin1 extends HttpServlet{
 	    
 		
 		// http://localhost:8080/S4/login?password=123456  ( response -> Ok )
+		List< Item> users = new ArrayList<>();
+		Item TempUser1 = new Item("user1", "123456");
+		users.add(TempUser1);
+		Item TempUser2 = new Item("user2", "112233");
+		users.add(TempUser2);
+		Item TempUser3 = new Item("user3", "654321");
+		users.add(TempUser3);
 		
-		
-	    String user_data;
+	    String user_data="";
 	
 		String server_user_password = request.getParameter("password");
 		
 		
-		if(server_user_password.equals("123456")	){
+		for(int i = 0; i < users.size(); i++){
+		
+			//if(server_user_password.equals("123456")	){
+			if(server_user_password.equals(users.get(i).getValue() )){
+				//send user profile data
+				user_data = "ok";
+				break;
+			}else{
 			
-			//send user profile data
-			user_data = "ok";
-		}else{
-			
-			//report user that authentication data not valid
-			user_data = "fail";
+				//report user that authentication data not valid
+				user_data = "fail";
+			}
+		
 		}
+		
 		
 		Item tempItem = new Item("", "");
 		//user_data = ("item : [ {" + tempItem.getName() + "} , {" + tempItem.getValue() + "} ]");
