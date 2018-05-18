@@ -26,6 +26,14 @@ public class MyLogin1 extends HttpServlet{
 	    
 		
 		// http://localhost:8080/S4/login?password=123456  ( response -> Ok )
+		//now instead of previous link use valid data to authenticate
+		// like this:
+		// http://localhost:8080/S4/login?password=123456&&username=user1
+		//if authentication is successfully then "ok" response
+		//if wrong aunthentication data and user and password not found then "fail" response
+		//if password and username data is missing then "no data" response
+		
+		
 		List< Item> users = new ArrayList<>();
 		Item TempUser1 = new Item("user1", "123456");
 		users.add(TempUser1);
@@ -37,23 +45,25 @@ public class MyLogin1 extends HttpServlet{
 	    String user_data="";
 	
 		String server_user_password = request.getParameter("password");
+		String server_username = request.getParameter("username");
 		
+		if( server_user_password != null && server_username != null && server_user_password.length() != 0 && server_username.length() != 0 ){
 		
-		for(int i = 0; i < users.size(); i++){
+			for(int i = 0; i < users.size(); i++){
 		
-			//if(server_user_password.equals("123456")	){
-			if(server_user_password.equals(users.get(i).getValue() )){
-				//send user profile data
-				user_data = "ok";
-				break;
-			}else{
-			
+				//check user and password
+				if( server_username.equals(users.get(i).getName()) &&  server_user_password.equals(users.get(i).getValue() )){
+					//send user profile data
+					user_data = "ok";
+					break;
+				}else{
 				//report user that authentication data not valid
 				user_data = "fail";
+				}
+		
 			}
 		
-		}
-		
+		} else { user_data = "no data"; }
 		
 		Item tempItem = new Item("", "");
 		//user_data = ("item : [ {" + tempItem.getName() + "} , {" + tempItem.getValue() + "} ]");
