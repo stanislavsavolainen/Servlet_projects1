@@ -2,6 +2,9 @@ package src;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,26 @@ public class MyLogin1 extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 	
+	
+	//sha256 code from : https://stackoverflow.com/questions/5531455/how-to-hash-some-string-with-sha256-in-java
+	public static String sha256(String base) {
+	    try{
+	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	        byte[] hash = digest.digest(base.getBytes("UTF-8"));
+	        StringBuffer hexString = new StringBuffer();
+
+	        for (int i = 0; i < hash.length; i++) {
+	            String hex = Integer.toHexString(0xff & hash[i]);
+	            if(hex.length() == 1) hexString.append('0');
+	            hexString.append(hex);
+	        }
+
+	        return hexString.toString();
+	    } catch(Exception ex){
+	       throw new RuntimeException(ex);
+	    }
+	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//PrintWriter out = response.getWriter();
@@ -33,6 +56,9 @@ public class MyLogin1 extends HttpServlet{
 		//if wrong aunthentication data and user and password not found then "fail" response
 		//if password and username data is missing then "no data" response
 		
+		//changed code, convert user password to sha256 hash and return it to client with "ok" message
+		//this is learning purpose ( for example if register user then generate new password sha256-hash on server)
+		
 		
 		List< Item> users = new ArrayList<>();
 		Item TempUser1 = new Item("user1", "123456");
@@ -47,6 +73,11 @@ public class MyLogin1 extends HttpServlet{
 		String server_user_password = request.getParameter("password");
 		String server_username = request.getParameter("username");
 		
+		
+		
+		
+		
+		
 		if( server_user_password != null && server_username != null && server_user_password.length() != 0 && server_username.length() != 0 ){
 		
 			for(int i = 0; i < users.size(); i++){
@@ -54,7 +85,32 @@ public class MyLogin1 extends HttpServlet{
 				//check user and password
 				if( server_username.equals(users.get(i).getName()) &&  server_user_password.equals(users.get(i).getValue() )){
 					//send user profile data
-					user_data = "ok";
+					
+					//user_data = "ok";
+					
+					
+					//https://stackoverflow.com/questions/5531455/how-to-hash-some-string-with-sha256-in-java
+					// +++++++++++++++ sha256crypting ++++++++++++++++++++
+					MessageDigest digest;
+					byte[] hash;
+					
+					try {
+						digest = MessageDigest.getInstance("SHA-256");
+						hash = digest.digest(server_user_password.getBytes(StandardCharsets.UTF_8));
+						
+						
+						
+						user_data = "ok, password hash :" +sha256(hash.toString()) +"";
+						
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//+++++++++++++++++++++++++++++++++++++++++++++++++++++
+					
+					
+					 
 					break;
 				}else{
 				//report user that authentication data not valid
