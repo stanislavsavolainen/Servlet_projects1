@@ -1,0 +1,113 @@
+
+
+<!-- 
+https://www.w3schools.com/css/css_inline-block.asp
+-->
+
+<style type="text/css">
+
+div {
+		color: green;
+		font-size: 20px;
+		background-color: orange;
+		 border-style: solid;
+    		border-width: 1px;
+		float: right;
+		display: inline-block;
+		margin-left : 2px;
+	}
+	button {
+		
+		color: green;
+		font-size: 20px;
+		background-color: orange;
+	}
+
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+
+// ---------------------------------------------------------------
+
+function makeGUI(js_object){
+	
+	$("#answer").text("");
+
+	//$( "#answer").append( "<div>" );
+
+	let gui = "";
+	//gui += "<div>";
+
+	js_object.forEach( function ( element ) { 
+
+		//$( "#answer").append( "<div>" );
+ 		//$( "#answer").append( element );
+		//$( "#answer").append( "</div>" );
+		 
+		//$( "#answer").append( "</div>" + element + "</div>" );
+
+		gui += ("<div>" + element + "</div>");
+
+
+	});
+
+	//gui += "</div>";
+
+	$( "#answer").append(""+ gui );
+
+
+}
+
+//---------------------------------------------------------------
+
+function handleHttp(){
+	//https://en.wikipedia.org/wiki/Ajax_(programming)
+	$.ajax({
+	type: 'GET',
+	url: 'http://localhost:8080/S4/2?limit=78',
+	dataType: "JSON", // data type expected from server
+	success: function (data) {
+			
+			console.log(data);
+				
+			//JSON to javascript object
+			//https://www.w3schools.com/js/js_json_parse.asp		
+			//var js_object =  JSON.stringify(data); //JSON.parse(data);
+			
+			//$("#answer").text(js_object);
+			makeGUI(data);			
+
+
+	},
+	error: function() {
+		console.log('Error: ' + data);
+	}
+});
+	
+}
+
+//-----------------------------------------------------------------
+
+$(document).ready(function(){
+   
+	$("#button-id").click(function(){
+		//$("#answer").text("button clicked");
+		handleHttp();
+	});
+
+});
+
+
+</script>
+
+
+<html>
+<title> Button click </title>
+<body>
+<button id="button-id">click me</button>
+<p id="answer"></p>
+</body>
+</html>
